@@ -1,0 +1,760 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf130
+{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww9000\viewh8400\viewkind0
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f0\fs26 \cf0 \
+\
+\
+\
+/* This code is from menu selection... Does a bunch of fucked up stuff.\
+Moved it down here. \
+\
+setupHighlighted(indexPath)\
+Singleton.sharedInstance.isSideMenu = false\
+let className: String\
+var getUserDetail = false\
+var isParentSelected = false\
+var logoutUser = false\
+\
+let parentView: AnyObject = self.presentingViewController as! AnyObject\
+\
+\
+switch menuKeys[indexPath.row] \{\
+case kProfile:\
+getUserDetail = true\
+className = NSStringFromClass(ProfileViewController).componentsSeparatedByString(".").last!\
+isParentSelected =  compareItPresentingView(self.presentingViewController!, selectedView: ProfileViewController.self)\
+\
+case kSettings:\
+getUserDetail = true\
+className = NSStringFromClass(SettingsViewController).componentsSeparatedByString(".").last!\
+isParentSelected =  compareItPresentingView(self.presentingViewController!, selectedView: SettingsViewController.self)\
+\
+case kHelp:\
+className = NSStringFromClass(HelpViewController).componentsSeparatedByString(".").last!\
+isParentSelected =  compareItPresentingView(self.presentingViewController!, selectedView: HelpViewController.self)\
+\
+case kLogout:\
+logoutUser = true\
+className = NSStringFromClass(LoginViewController).componentsSeparatedByString(".").last!\
+NSUserDefaults.standardUserDefaults().setBool(false, forKey: "isLoggedIn")\
+let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)\
+var viewController = mainStoryboard.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController\
+\
+self.wsManager.logout(completionHandler: \{ (success, message) -> Void in\
+if success \{\
+println("[MVC] logged out")\
+NSUserDefaults.standardUserDefaults().removeObjectForKey("user_email")\
+\} else \{\
+println("[MVC] failed to logout user: \\(message)")\
+\}\
+dispatch_async(dispatch_get_main_queue(), \{ () -> Void in\
+UIApplication.sharedApplication().keyWindow!.makeKeyAndVisible()\
+UIApplication.sharedApplication().keyWindow?.rootViewController?.modalPresentationStyle = UIModalPresentationStyle.Custom\
+UIApplication.sharedApplication().keyWindow!.rootViewController? = viewController\
+\})\
+\})\
+\
+return\
+\
+default:\
+className = NSStringFromClass(HomeViewController).componentsSeparatedByString(".").last!\
+isParentSelected =  compareItPresentingView(self.presentingViewController!, selectedView: HomeViewController.self)\
+\}\
+if isParentSelected \{\
+dispatch_async(dispatch_get_main_queue(), \{ () -> Void in\
+self.dismissViewControllerAnimated(true, completion: nil)\
+\})\
+return\
+\}\
+// Capturing scrrenshot of current screen\
+let backgroundQueue = dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0)\
+dispatch_async(backgroundQueue, \{\
+\
+UIGraphicsBeginImageContext(UIApplication.sharedApplication().keyWindow!.bounds.size)\
+UIApplication.sharedApplication().keyWindow!.layer.renderInContext(UIGraphicsGetCurrentContext())\
+let image = UIGraphicsGetImageFromCurrentImageContext()\
+UIGraphicsEndImageContext()\
+Singleton.sharedInstance.menuScreenShot = image\
+\
+let vc = self.storyboard?.instantiateViewControllerWithIdentifier(className) as! UIViewController\
+Singleton.sharedInstance.isSideMenuItemSelected = true\
+Singleton.sharedInstance.sideMenuItem = vc\
+\
+if getUserDetail \{\
+self.wsManager.getUserData(completionHandler: \{ (user) -> Void in\
+if let user = user \{\
+NSUserDefaults.standardUserDefaults().setObject(user.email, forKey: "user_email")\
+dispatch_async(dispatch_get_main_queue(), \{ () -> Void in\
+if className == "SettingsViewController"\{\
+(vc as!  SettingsViewController).user = user\
+\}\
+else\{\
+(vc as!  ProfileViewController).user = user\
+\}\
+self.presentingViewController?.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)\
+println("Somethings going on here... above Presenting view controller \\(self.presentingViewController)");\
+//self.dismissViewControllerAnimated(true, completion: nil)\
+\})\
+\} else \{\
+println("something went wrong. please try again")\
+\}\
+\})\
+\} else \{\
+dispatch_async(dispatch_get_main_queue(), \{ () -> Void in\
+self.presentingViewController?.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)\
+println("Somethings going on here... Presenting view controller \\(self.presentingViewController)");\
+\})\
+\}\
+\})\
+\
+\
+*/\
+\
+\
+\
+\
+\
+\
+//\
+//  MenuViewController.swift\
+//  EdgeMusicNetwork\
+//\
+//  Created by Developer II on 6/4/15.\
+//  Copyright (c) 2015 Angel Jonathan GM. All rights reserved.\
+//\
+\
+import UIKit\
+import FBSDKCoreKit\
+import FBSDKLoginKit\
+\
+let visibleWidthForSlidingOutView: CGFloat = 50\
+let kHome = "home", kProfile = "profile", kAboutEdge = "about",  kLogout = "logout"\
+\
+class MenuViewController: PortraitViewController \{\
+	\
+	private var isKeyboardVisible = false\
+	private let menuKeys  = [kHome, kProfile, kAboutEdge, kLogout] //]\
+	private let menuName  = [kHome: "Home", kProfile: "My Profile", kAboutEdge: "About", kLogout: "Logout"]\
+	private let menuImage = [kHome: "menu_home_light", kProfile: "menu_profile_light", kAboutEdge: "menu_help_light",  kLogout: "menu_logout_light"]\
+	private let wsManager = WebserviceManager()\
+	private let alertControlerManager = AlertControllerManager()\
+	\
+	@IBOutlet weak var tableView: UITableView!\
+	@IBOutlet weak var tableViewBottomLayoutConstraint: NSLayoutConstraint!\
+	@IBOutlet weak var activityIndicator: UIActivityIndicatorView!\
+	\
+	var searchController: UISearchController!\
+	var filteredData = [String: [AnyObject]]()\
+    //var filteredData = [];\
+	\
+	override func viewDidAppear(animated: Bool) \{\
+		//println("[MVC] viewDidAppear")\
+		super.viewDidAppear(animated)\
+	\}\
+	\
+	override func viewDidLayoutSubviews() \{\
+		//println("[MVC] viewDidLayoutSubviews")\
+		super.viewDidLayoutSubviews()\
+	\}\
+	\
+	override func viewDidLoad() \{\
+		//println("[MVC] viewDidLoad")\
+		super.viewDidLoad()\
+		\
+		// Do any additional setup after loading the view.\
+       /* searchController = UISearchController(searchResultsController: nil)\
+		searchController.searchResultsUpdater = self\
+		searchController.dimsBackgroundDuringPresentation = true\
+		searchController.searchBar.delegate = self\
+        searchController.searchBar.barTintColor =  UIColor.whiteColor()\
+        searchController.searchBar.searchBarStyle = UISearchBarStyle.Default\
+        searchController.searchBar.backgroundColor =  UIColor.whiteColor()\
+       searchController.searchBar.placeholder = ""\
+        searchController.searchBar.sizeToFit()\
+       searchController.searchBar.setPositionAdjustment(UIOffset(horizontal: 20, vertical: 0), forSearchBarIcon: UISearchBarIcon.Search)*/\
+        self.tableView.backgroundColor = UIColor.clearColor();\
+        \
+      // Do any additional setup after loading the view.\
+        searchController = UISearchController(searchResultsController: nil);\
+        searchController.searchResultsUpdater = self;\
+        searchController.dimsBackgroundDuringPresentation = false;\
+        searchController.searchBar.delegate = self;\
+        searchController.searchBar.barTintColor =  UIColor.whiteColor();\
+        searchController.searchBar.searchBarStyle = UISearchBarStyle.Minimal;\
+        searchController.searchBar.placeholder = "";\
+        searchController.searchBar.sizeToFit();\
+        searchController.searchBar.barTintColor = UIColor.whiteColor();\
+        \
+       /* if (searchField)\
+        \{\
+            UIView *searchIcon = searchField.leftView;\
+            if ([searchIcon isKindOfClass:[UIImageView class]]) \{\
+                NSLog(@"aye");\
+            \}\
+            searchField.rightView = searchIcon;\
+            searchField.leftViewMode = UITextFieldViewModeNever;\
+            searchField.rightViewMode = UITextFieldViewModeAlways;\
+        \}*/\
+        \
+         // searchController.searchBar.setPositionAdjustment(UIOffsetMake(255, 0), forSearchBarIcon: UISearchBarIcon.Search)\
+        \
+        //[self.searchBar setPositionAdjustment:UIOffsetMake(255, 0) forSearchBarIcon:UISearchBarIconSearch];\
+        //[self.searchBar setSearchTextPositionAdjustment:UIOffsetMake(-270, 0)];\
+        \
+/*        var searchTextField: UITextField?\
+        \
+        \
+        for subView: AnyObject in searchController.searchBar.subviews \{\
+            if subView.isKindOfClass(UITextField)\{\
+                searchTextField = subView as? UITextField\
+                break\
+            \}\
+        \}\
+        \
+        if let textField = searchTextField \{\
+            \
+            var searchIcon = textField.leftView\
+            if searchIcon?.isKindOfClass(UIImageView)\{\
+                \
+            \}\
+        \}\
+*/\
+		tableView.tableHeaderView = searchController.searchBar\
+		definesPresentationContext = true // since the search view covers the table view when active we make the view controller define the presentation context\
+		\
+        let cellOptionclassName = NSStringFromClass(MenuOptionCell).componentsSeparatedByString(".").last!;\
+        tableView.registerNib(UINib(nibName: cellOptionclassName, bundle: nil), forCellReuseIdentifier: "cellOption");\
+        let videoCellClass = NSStringFromClass(ArtistVideoTableCell).componentsSeparatedByString(".").last!;\
+        tableView.registerNib(UINib(nibName: videoCellClass, bundle:nil), forCellReuseIdentifier: "videoCell");\
+        tableView.tableFooterView = UIView();\
+        \
+        for searchSubView in self.searchController.searchBar.subviews\
+        \{\
+            for subView in searchSubView.subviews\
+            \{\
+                if let textField = subView as? UITextField\
+                \{\
+                    textField.attributedPlaceholder = NSAttributedString(string: "Search",\
+                        attributes: [NSForegroundColorAttributeName: UIColor.whiteColor()]);\
+                    textField.textColor = UIColor.whiteColor();\
+                \}\
+            \}\
+        \}\
+        \
+	\}\
+	\
+	override func viewWillAppear(animated: Bool) \{\
+		//println("[MVC] viewWillAppear")\
+		super.viewWillAppear(animated)\
+        if searchController.active \{\
+            let timer = NSTimer(timeInterval: 0.2, target: self.sideMenuViewController, selector: "hideContentViewController", userInfo: nil, repeats: false);\
+            NSRunLoop.currentRunLoop().addTimer(timer, forMode: NSRunLoopCommonModes)\
+        \}\
+		// Notification for dismissing Side menu\
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)\
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)\
+		\
+		UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent\
+	\}\
+	\
+	override func viewWillDisappear(animated: Bool) \{\
+		super.viewWillDisappear(animated)\
+		\
+		NSNotificationCenter.defaultCenter().removeObserver(self)\
+		\
+		UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.Default\
+		// NSNotificationCenter.defaultCenter().removeObserver(self, name: "dismissViews", object: nil)\
+	\}\
+	\
+	/*override func prefersStatusBarHidden() -> Bool \{\
+	return true\
+	\}*/\
+	\
+	func keyboardDidShow(notification: NSNotification) \{\
+		if isKeyboardVisible \{\
+			return\
+		\}\
+		//let info = notification.userInfo as! [String: AnyObject]\
+		//let aValue = info[UIKeyboardFrameEndUserInfoKey] as! NSValue\
+		//let keyboardRect = aValue.CGRectValue()\
+		//keyboardRect = view.convertRect(keyboardRect, fromView: nil)\
+		//tableViewBottomLayoutConstraint.constant = keyboardRect.size.height\
+		isKeyboardVisible = true\
+	\}\
+	\
+	func keyboardWillHide(notification: NSNotification) \{\
+		if !isKeyboardVisible \{\
+			return\
+		\}\
+		//tableViewBottomLayoutConstraint.constant = 0\
+		isKeyboardVisible = false\
+	\}\
+    \
+    func logout()\{\
+        print("Logout");\
+        FBSDKLoginManager().logOut();\
+        NSUserDefaults.standardUserDefaults().setBool(false, forKey: "isLoggedIn");\
+        self.wsManager.logout(completionHandler: \{ (success, message) -> Void in\
+            if success \{\
+                print("[MVC] logged out")\
+                NSUserDefaults.standardUserDefaults().removeObjectForKey("user_email")\
+            \} else \{\
+                print("[MVC] failed to logout user: \\(message)")\
+            \}\
+            //Dismiss the view\
+            self.sideMenuViewController?.parentViewController?.navigationController?.popToRootViewControllerAnimated(false);\
+            self.sideMenuViewController.dismissViewControllerAnimated(true, completion: nil);\
+        \})\
+    \}\
+	\
+\}\
+\
+extension MenuViewController: UITableViewDataSource \{\
+	\
+	func numberOfSectionsInTableView(tableView: UITableView) -> Int \{\
+		if let searchController = searchController where searchController.active \{\
+			tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine\
+			//println("[MVC] numberOfSectionsInTableView: \\(filteredData.count) - search results")\
+			return filteredData.count\
+		\} else \{\
+			tableView.separatorStyle = UITableViewCellSeparatorStyle.None\
+			//println("[MVC] numberOfSectionsInTableView: 1 - menu")\
+			return 1\
+		\}\
+	\}\
+	\
+	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell \{\
+		var cell: UITableViewCell\
+		if let searchController = searchController where searchController.active \{\
+            let customCell = tableView.dequeueReusableCellWithIdentifier("videoCell", forIndexPath: indexPath) as! ArtistVideoTableCell;\
+			//let key = filteredData.keys.array[indexPath.section]\
+            let key = Array(filteredData.keys)[indexPath.section];\
+			let items: [AnyObject] = filteredData[key]!\
+			if let video = items[indexPath.row] as? Video \{\
+                \
+                customCell.videoNameLabel.text = video.name\
+                customCell.artistNameLabel.text = video.name\
+                customCell.videoInfoLabel.text = "\\(video.views) views"\
+                //customCell.detailButton.addTarget(self, action: "watchVideoPressed:", forControlEvents: UIControlEvents.TouchUpInside)\
+                customCell.thumbnailImageView.image = nil\
+                if let thumbnail = video.thumbnail \{\
+                    customCell.thumbnailImageView.image = thumbnail\
+                \} else \{\
+                    customCell.activityIndicator.startAnimating()\
+                    downloadImageForItem(video, indexPath: indexPath)\
+                \}\
+                \
+			\} else \{\
+				customCell.videoNameLabel.text = "not EMN Category"\
+			\}\
+			cell = customCell\
+			//println("[MVC] cellForRowAtIndexPath: \\(indexPath.section) - \\(indexPath.row) - search results")\
+		\} else \{\
+			let customCell = tableView.dequeueReusableCellWithIdentifier("cellOption", forIndexPath: indexPath) as! MenuOptionCell\
+			customCell.menuLabel.text = menuName[menuKeys[indexPath.row]]\
+\
+			customCell.menuImageView.image = UIImage(named: menuImage[menuKeys[indexPath.row]]!)\
+			customCell.selectionStyle = UITableViewCellSelectionStyle.None\
+			cell = customCell\
+			//println("[MVC] cellForRowAtIndexPath: \\(indexPath.section) - \\(indexPath.row) - menu")\
+		\}\
+		return cell\
+	\}\
+	\
+	func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int \{\
+		\
+		if let searchController = searchController where searchController.active \{\
+			let key = Array(filteredData.keys)[section]\
+			//println("[MVC] numberOfRowsInSection: \\(section) - key: \\(key) - count: \\(filteredData[key]?.count ?? 0) - search results")\
+			return filteredData[key]?.count ?? 0\
+		\} else \{\
+			//println("[MVC] numberOfRowsInSection: \\(section) - count: \\(menuKeys.count) - menu")\
+			return menuKeys.count\
+		\}\
+	\}\
+	\
+	func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? \{\
+		if let searchController = searchController where searchController.active \{\
+			let view = UINib(nibName: "SearchResultTitleView", bundle: nil).instantiateWithOwner(nil, options: nil)[0] as! SearchResultTitleView\
+			view.titleLabel.text = Array(filteredData.keys)[section].uppercaseString\
+			return view\
+		\}\
+		return UIView()\
+	\}\
+	\
+\}\
+\
+extension MenuViewController: UITableViewDelegate \{\
+	\
+	func tableView(tableView: UITableView, didHighlightRowAtIndexPath indexPath: NSIndexPath) \{\
+		if !searchController.active \{\
+			setupHighlighted(indexPath)\
+		\}\
+	\}\
+	\
+	func tableView(tableView: UITableView, didUnhighlightRowAtIndexPath indexPath: NSIndexPath) \{\
+		if !searchController.active \{\
+			setupUnhighlighted(indexPath)\
+		\}\
+	\}\
+	\
+	func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) \{\
+		if let searchController = searchController where searchController.active \{\
+			\
+            tableView.deselectRowAtIndexPath(indexPath, animated: true);\
+            \
+			let key = Array(self.filteredData.keys)[indexPath.section]\
+			let items: [AnyObject] = filteredData[key]!\
+			\
+			if let item = items[indexPath.row] as? EMNCategory \{\
+				//println("[MVC] selected \\(key): \\(item.id) - \\(item.name)")\
+				var vc: UIViewController\
+				if let item = item as? Video \{\
+					let className = NSStringFromClass(WatchingViewController).componentsSeparatedByString(".").last!\
+					vc = self.storyboard?.instantiateViewControllerWithIdentifier(className) as! WatchingViewController\
+					(vc as! WatchingViewController).playlist = [item.ooyalaId]\
+					(vc as! WatchingViewController).addVideoToDict(item)\
+                    (vc as! WatchingViewController).fromSearch = true;\
+				\} else \{\
+					let className = NSStringFromClass(ArtistPageViewController).componentsSeparatedByString(".").last!\
+					vc = self.storyboard?.instantiateViewControllerWithIdentifier(className) as! ArtistPageViewController\
+					(vc as! ArtistPageViewController).emnCategory = item\
+				\}\
+				\
+				activityIndicator.startAnimating()\
+				wsManager.downloadImage2(item.imageURL, completionHandler: \{ (image) -> Void in\
+					//item.image = image\
+					item.image = image ?? UIImage(named: "coverArt")!\
+					\
+					dispatch_async(dispatch_get_main_queue(), \{ () -> Void in\
+						self.activityIndicator.stopAnimating()\
+                        let navVC = UINavigationController(rootViewController: vc);\
+                        self.sideMenuViewController.contentViewController = navVC;\
+                        self.sideMenuViewController.hideMenuViewController();\
+					\})\
+				\})\
+				\
+			\}\
+            return\
+		\}\
+		\
+        switch menuKeys[indexPath.row] \{\
+        case kProfile:\
+            let profileFlow = self.storyboard?.instantiateViewControllerWithIdentifier("Profile") as! UINavigationController\
+            //var profileVC = profileFlow.viewControllers[0] as! ProfileViewController\
+            \
+            self.wsManager.getUserData(completionHandler: \{ (user) -> Void in\
+                if let user = user \{\
+                    print("User: \\(user)")\
+                    NSUserDefaults.standardUserDefaults().setObject(user.email, forKey: "user_email")                    \
+                    dispatch_async(dispatch_get_main_queue(), \{ () -> Void in\
+                        self.sideMenuViewController.contentViewController = profileFlow\
+                        self.sideMenuViewController.hideMenuViewController()\
+                    \})\
+                \} else \{\
+                    print("something went wrong. please try again")\
+                \}\
+            \})\
+\
+            break;\
+            /*\
+        case kHelp:\
+            let helpFlow = self.storyboard?.instantiateViewControllerWithIdentifier("Help") as! UINavigationController\
+            self.sideMenuViewController.contentViewController = helpFlow\
+            self.sideMenuViewController.hideMenuViewController()\
+            break;\
+*/\
+        case kAboutEdge:\
+            let settingsFlow = self.storyboard?.instantiateViewControllerWithIdentifier("Settings") as! UINavigationController\
+            self.sideMenuViewController.contentViewController = settingsFlow\
+            self.sideMenuViewController.hideMenuViewController()\
+            break;\
+        case kHome:\
+            let watchingFlow = self.storyboard?.instantiateViewControllerWithIdentifier("Watching") as! UINavigationController\
+            self.sideMenuViewController.contentViewController = watchingFlow\
+            self.sideMenuViewController.hideMenuViewController()\
+            break;\
+        case kLogout:\
+            self.logout()\
+            break;\
+        default:\
+            \
+            break;\
+        \}\
+        \
+        return\
+	\}\
+	\
+	func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) \{\
+		if !searchController.active \{\
+			setupUnhighlighted(indexPath)\
+        \}\
+	\}\
+	\
+	func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat \{\
+		if let searchController = searchController where searchController.active \{\
+			return 77\
+		\} else \{\
+			return 50\
+		\}\
+	\}\
+	\
+	func setupHighlighted(indexPath: NSIndexPath) \{\
+		let cell = tableView.cellForRowAtIndexPath(indexPath) as! MenuOptionCell\
+		cell.menuImageView.image = UIImage(named: menuImage[menuKeys[indexPath.row]]! + "_light")\
+	\}\
+	\
+	func setupUnhighlighted(indexPath: NSIndexPath) \{\
+		let cell = tableView.cellForRowAtIndexPath(indexPath) as! MenuOptionCell\
+		cell.menuImageView.image = UIImage(named: menuImage[menuKeys[indexPath.row]]!)\
+	\}\
+	\
+	func compareItPresentingView(presentingView: UIViewController, selectedView: AnyClass) -> Bool\{\
+		\
+        if let navController = presentingView as? UINavigationController \{\
+            return self.compareItPresentingView(navController.viewControllers[0] , selectedView: selectedView)\
+        \}\
+        \
+		if presentingView.isKindOfClass(selectedView) \{\
+			return true\
+		\}\
+		return false\
+	\}\
+    \
+    func downloadImageForItem(item: Video, indexPath: NSIndexPath) \{\
+        wsManager.downloadImage2(item.thumbnailURL, completionHandler: \{ (image) -> Void in\
+            //item.thumbnail = image\
+            item.thumbnail = image ?? UIImage(named: "coverArt")!\
+            dispatch_async(dispatch_get_main_queue(), \{ () -> Void in\
+                if let cell = self.tableView.cellForRowAtIndexPath(indexPath) as? ArtistVideoTableCell \{ // cell is nil for cells not visible in screen\
+                    cell.activityIndicator.stopAnimating()\
+                    cell.thumbnailImageView.image = item.thumbnail\
+                \}\
+            \})\
+        \})\
+    \}\
+\}\
+\
+extension MenuViewController: UISearchBarDelegate \{\
+    \
+    func searchBarShouldBeginEditing(searchBar: UISearchBar) -> Bool\
+    \{\
+        //let rect :CGRect = self.sideMenuViewController.contentViewController.view.frame;\
+        //let temp = NSStringFromCGRect(rect);\
+        self.sideMenuViewController.hideContentViewController();\
+        return true;\
+    \}\
+    \
+    func searchBarShouldEndEditing(searchBar: UISearchBar) -> Bool \{\
+        //let rect :CGRect = self.sideMenuViewController.contentViewController.view.frame;\
+        //let temp = NSStringFromCGRect(rect);\
+        return true;\
+    \}\
+    \
+	func searchBarSearchButtonClicked(searchBar: UISearchBar) \{\
+		//println("[MVC] searchBarSearchButtonClicked")\
+		activityIndicator.startAnimating()\
+		let searchString = searchController.searchBar.text\
+		//println("[MVC] search for: \\(searchString)")\
+		\
+		wsManager.searchForMediaMatching(searchString!, completionHandler: \{ (itemsDictionary: [String: [AnyObject]]) -> Void in\
+			dispatch_async(dispatch_get_main_queue(), \{ () -> Void in\
+				//println("[MVC] search results items: \\(itemsDictionary.count)")\
+				self.activityIndicator.stopAnimating()\
+				self.filteredData = itemsDictionary\
+				self.tableView.reloadData()\
+			\})\
+		\})\
+	\}\
+	func searchBarCancelButtonClicked(searchBar: UISearchBar) \{\
+        filteredData = [String: [AnyObject]]();\
+		self.activityIndicator.stopAnimating()\
+        self.sideMenuViewController.showContentViewController();\
+		//println("[MVC] searchBarCancelButtonClicked")\
+	\}\
+	\
+\}\
+\
+extension MenuViewController: UISearchResultsUpdating \{\
+	func updateSearchResultsForSearchController(searchController: UISearchController) \{\
+		tableView.reloadData()\
+		//println("[MVC] updateSearchResultsForSearchController - reloaded data")\
+	\}\
+	\
+\}\
+\
+\
+\
+		//var tmpPlaylist = ["J5Zm5jbzrJoQmFG-07qeeOAz4QVt875X","N4a25jbzr_xEeEMHJ02oaQve_Nx77KTt","lkZW5jbzr6WPWxHg6HSmHC_nRl-9P4xC","5sZW5jbzo54MqmId00YiBqCAx1NZTvvW","w0YnBnbzpgq-mcQvlGG0eTGkAIrGolaw","dtZG5jbzrZwTDeDmnKgZXfXFed58zqFu","A1bW5jbzpHgtbxpbX-xasg4JZsnFaoSh","gyazNkbzqe0C-BkLxhZO1BldbOEmg0fX","Z0aW5jbzrAJQ4s_SntPL1NiSRq_igdnP","5rZm5jbzp6aRUrGb7Y_hBIiz-0fFvbwP","o4aG5jbzq0flWLsLSpfyFjoFMSklAqEt", "wyZm5jbzrm1POrKf7wi9zuA24s0XjlIa", "t5am5jbzqxjOCzUNioUG7bWFjDHDVivv", "B0Y25jbzpOFZmsiJaOPkfZQMIVneLxEY"]\
+		//println("[WVC] videos to play: \\(playlist)")\
+\
+\
+\
+        /*\
+        let horizontalConstraint = NSLayoutConstraint(item: loadingIndicator, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: loadingView, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant:0);\
+        loadingView.addConstraint(horizontalConstraint);\
+        let verticalConstriaint = NSLayoutConstraint(item: loadingIndicator, attribute: NSLayoutAttribute.CenterY, relatedBy:\
+            NSLayoutRelation.Equal, toItem: loadingView, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: 0);\
+        loadingView.addConstraint(verticalConstriaint);\
+        */\
+\
+\
+\
+//\
+//  SlideMenuAnimator.swift\
+//  EdgeMusicNetwork\
+//\
+//  Created by Developer II on 6/12/15.\
+//  Copyright (c) 2015 Angel Jonathan GM. All rights reserved.\
+//\
+\
+import UIKit\
+\
+class SlideMenuAnimator: UIPercentDrivenInteractiveTransition \{\
+	\
+	//private let visibleWidthForSlidingOutView: CGFloat = 50\
+	private var enterPanGesture: UIScreenEdgePanGestureRecognizer!\
+	private var exitPanGesture: UIPanGestureRecognizer!\
+	private var interactive = false\
+	private var presenting = false\
+	\
+	var enterSegue: String!\
+	var exitSegue: String!\
+	var sourceViewController: UIViewController! \{\
+		didSet \{\
+			enterPanGesture = UIScreenEdgePanGestureRecognizer()\
+			enterPanGesture.addTarget(self, action: "handleOnStagePan:")\
+			enterPanGesture.edges = UIRectEdge.Left\
+			sourceViewController.view.addGestureRecognizer(enterPanGesture)\
+		\}\
+	\}\
+	var menuViewController: UIViewController! \{\
+		didSet \{\
+			exitPanGesture = UIPanGestureRecognizer()\
+			exitPanGesture.addTarget(self, action: "handleOffStagePan:")\
+			menuViewController.view.addGestureRecognizer(exitPanGesture)\
+		\}\
+	\}\
+\}\
+\
+extension SlideMenuAnimator: UIViewControllerAnimatedTransitioning \{\
+	\
+	func animateTransition(transitionContext: UIViewControllerContextTransitioning) \{\
+		let container = transitionContext.containerView()\
+		let fromVC = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)!\
+		let toVC = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey)!\
+		\
+		let duration = transitionDuration(transitionContext)\
+		let frame = container!.frame\
+		\
+		toVC.view.userInteractionEnabled = false\
+		fromVC.view.userInteractionEnabled = false\
+		\
+		if presenting \{\
+			container!.addSubview(toVC.view)\
+			container!.addSubview(fromVC.view)\
+			\
+			toVC.view.frame = CGRect(x: 0, y: 0, width: frame.size.width - visibleWidthForSlidingOutView, height: frame.size.height)\
+		\} else \{\
+			container!.addSubview(fromVC.view)\
+			container!.addSubview(toVC.view)\
+			\
+			toVC.view.frame = CGRect(origin: CGPoint(x: frame.size.width - visibleWidthForSlidingOutView, y: 0), size: frame.size)\
+		\}\
+		\
+		UIView.animateWithDuration(duration, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 3, options: presenting ? UIViewAnimationOptions.CurveEaseIn : UIViewAnimationOptions.CurveEaseOut, animations: \{ () -> Void in\
+			if self.presenting \{\
+				fromVC.view.frame = CGRect(origin: CGPoint(x: frame.size.width - visibleWidthForSlidingOutView, y: 0), size: frame.size)\
+			\} else \{\
+				toVC.view.frame = frame\
+			\}\
+			\}, completion: \{ (success: Bool) -> Void in\
+				if transitionContext.transitionWasCancelled() \{\
+					transitionContext.completeTransition(false)\
+					UIApplication.sharedApplication().keyWindow!.addSubview(fromVC.view)\
+					//println("[SMA] transitionWasCancelled (" + (self.presenting ? "" : "not ") + "presenting)")\
+					fromVC.view.userInteractionEnabled = true\
+					toVC.view.userInteractionEnabled = true\
+				\} else \{\
+					transitionContext.completeTransition(true)\
+					UIApplication.sharedApplication().keyWindow!.addSubview(toVC.view)\
+					//println("[SMA] completeTransition (" + (self.presenting ? "" : "not ") + "presenting)")\
+					fromVC.view.userInteractionEnabled = true\
+					toVC.view.userInteractionEnabled = true\
+				\}\
+		\})\
+		\
+	\}\
+	\
+	func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval \{\
+		return 0.5\
+	\}\
+	\
+	func handleOffStagePan(pan: UIPanGestureRecognizer) \{\
+		let translation = pan.translationInView(pan.view!)\
+		let d = translation.x / CGRectGetWidth(pan.view!.bounds) * -0.5\
+		switch pan.state \{\
+		case UIGestureRecognizerState.Began:\
+			interactive = true\
+			menuViewController.performSegueWithIdentifier(exitSegue, sender: self)\
+		case UIGestureRecognizerState.Changed:\
+			updateInteractiveTransition(d)\
+		default:\
+			interactive = false\
+			if d > 0.2 \{\
+				finishInteractiveTransition()\
+			\} else \{\
+				cancelInteractiveTransition()\
+			\}\
+		\}\
+	\}\
+	\
+	func handleOnStagePan(pan: UIPanGestureRecognizer) \{\
+		let translation = pan.translationInView(pan.view!)\
+		let d = translation.x / CGRectGetWidth(pan.view!.bounds) * 0.5\
+		switch pan.state \{\
+		case UIGestureRecognizerState.Began:\
+			interactive = true\
+			sourceViewController.performSegueWithIdentifier(enterSegue, sender: self)\
+		case UIGestureRecognizerState.Changed:\
+			updateInteractiveTransition(d)\
+		default:\
+			interactive = false\
+			if d > 0.2 \{\
+				finishInteractiveTransition()\
+			\} else \{\
+				cancelInteractiveTransition()\
+\
+			\}\
+		\}\
+	\}\
+	\
+\}\
+\
+extension SlideMenuAnimator: UIViewControllerTransitioningDelegate \{\
+	\
+	func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? \{\
+		presenting = false\
+		return self\
+	\}\
+	\
+	func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? \{\
+		self.presenting = true\
+		return self\
+	\}\
+	\
+	func interactionControllerForDismissal(animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? \{\
+		return interactive ? self : nil\
+	\}\
+	\
+	func interactionControllerForPresentation(animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? \{\
+		return interactive ? self : nil\
+	\}\
+	\
+\}\
+\
+\
+}

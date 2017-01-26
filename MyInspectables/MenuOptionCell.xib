@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="Gotham-Book.otf">
+            <string>Gotham-Book</string>
+        </mutableArray>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner">
+            <connections>
+                <outlet property="menuImageView" destination="ZD1-oJ-trL" id="Df6-UX-bSA"/>
+                <outlet property="menuLabel" destination="3wG-aW-6J3" id="ctz-pq-Xq7"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="ppf-k6-Ydo" customClass="MenuOptionCell" customModule="MyInspectables" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ppf-k6-Ydo" id="ydx-Il-LI1">
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="button_bg2" translatesAutoresizingMaskIntoConstraints="NO" id="Itd-Ml-pTO">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="59"/>
+                    </imageView>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu_home_light" translatesAutoresizingMaskIntoConstraints="NO" id="ZD1-oJ-trL">
+                        <rect key="frame" x="10" y="10" width="40" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="40" id="a1b-pN-49b"/>
+                            <constraint firstAttribute="height" constant="40" id="tE7-kv-UUa"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Option #1" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3wG-aW-6J3">
+                        <rect key="frame" x="70" y="22" width="522" height="15"/>
+                        <fontDescription key="fontDescription" name="Gotham-Book" family="Gotham" pointSize="15"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <color key="backgroundColor" red="0.14901960784313725" green="0.91764705882352937" blue="0.92156862745098034" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                <constraints>
+                    <constraint firstItem="ZD1-oJ-trL" firstAttribute="leading" secondItem="ydx-Il-LI1" secondAttribute="leading" constant="10" id="352-eL-8XO"/>
+                    <constraint firstItem="Itd-Ml-pTO" firstAttribute="leading" secondItem="ydx-Il-LI1" secondAttribute="leading" id="7wU-Qn-hA4"/>
+                    <constraint firstAttribute="trailing" secondItem="Itd-Ml-pTO" secondAttribute="trailing" id="Djt-Du-eJp"/>
+                    <constraint firstItem="3wG-aW-6J3" firstAttribute="leading" secondItem="ZD1-oJ-trL" secondAttribute="trailing" constant="20" id="NUC-A4-c2U"/>
+                    <constraint firstAttribute="centerY" secondItem="3wG-aW-6J3" secondAttribute="centerY" id="Ndw-XL-cXC"/>
+                    <constraint firstItem="Itd-Ml-pTO" firstAttribute="top" secondItem="ydx-Il-LI1" secondAttribute="top" id="b8m-Pt-BL2"/>
+                    <constraint firstAttribute="centerY" secondItem="ZD1-oJ-trL" secondAttribute="centerY" id="ucr-R3-w6d"/>
+                    <constraint firstAttribute="trailing" secondItem="3wG-aW-6J3" secondAttribute="trailing" constant="8" id="x9P-nl-EgD"/>
+                    <constraint firstAttribute="bottom" secondItem="Itd-Ml-pTO" secondAttribute="bottom" id="xBf-SG-ORs"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="backgroundImageView" destination="Itd-Ml-pTO" id="GRS-Vq-lQm"/>
+                <outlet property="menuImageView" destination="ZD1-oJ-trL" id="fg1-nI-KZh"/>
+                <outlet property="menuLabel" destination="3wG-aW-6J3" id="kyp-GS-tal"/>
+            </connections>
+            <point key="canvasLocation" x="377" y="320"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="button_bg2" width="375" height="51"/>
+        <image name="menu_home_light" width="21" height="22"/>
+    </resources>
+</document>

@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "WebserviceManager.(searchForMediaMatching(WebserviceManager) -&gt; (String, completionHandler : (itemsDictionary : [String : [AnyObject]]) -&gt; ()) -&gt; ()).(closure #1):WebserviceManager.swift">
+      </ContextState>
+      <ContextState
+         contextName = "WebserviceManager.(renamePlaylist(WebserviceManager) -&gt; (String, playlistName : String, completionHandler : (result : String, root : [NSDictionary]) -&gt; ()) -&gt; ()).(closure #1):WebserviceManager.swift">
+      </ContextState>
+      <ContextState
+         contextName = "HomeViewController.viewDidAppear(Bool) -&gt; ():HomeViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Singleton.sharedInstance.currentScreenMode">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ArtistPageViewController.collectionView(UICollectionView, cellForItemAtIndexPath : NSIndexPath) -&gt; UICollectionViewCell:ArtistPageViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Singleton.sharedInstance.user">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "WebserviceManager.reportVideoWatched(EMNVideoReport, completionHandler : (success : Bool, message : String?) -&gt; ()) -&gt; ():WebserviceManager.swift">
+      </ContextState>
+      <ContextState
+         contextName = "WatchingViewController.collectionView(UICollectionView, didSelectItemAtIndexPath : NSIndexPath) -&gt; ():WatchingViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "WebserviceManager.(reportVideoWatched(WebserviceManager) -&gt; (EMNVideoReport, completionHandler : (success : Bool, message : String?) -&gt; ()) -&gt; ()).(closure #1):WebserviceManager.swift">
+      </ContextState>
+      <ContextState
+         contextName = "WatchingViewController.viewWillAppear(Bool) -&gt; ():WatchingViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Singleton.sharedInstance.currentReport">
+            </PersistentString>
+            <PersistentString
+               value = "self.player">
+            </PersistentString>
+            <PersistentString
+               value = "self.player?.isPlaying()">
+            </PersistentString>
+            <PersistentString
+               value = "Singleton.sharedInstance.watchingVC.player">
+            </PersistentString>
+            <PersistentString
+               value = "Singleton.sharedInstance.watchingVC?.player?.isPlaying()">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ProfilePlaylistViewController.buttonPlaylist(UIButton) -&gt; ():ProfilePlaylistViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "sender.tag">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "WatchingViewController.updateVideoInfo(Video) -&gt; ():WatchingViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Singleton.sharedInstance.currentReport">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "WatchingViewController.viewDidLoad() -&gt; ():WatchingViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "WebserviceManager.(createUserPlaylistURL(WebserviceManager) -&gt; (String, completionHandler : (root : [NSDictionary]) -&gt; ()) -&gt; ()).(closure #1):WebserviceManager.swift">
+      </ContextState>
+      <ContextState
+         contextName = "WebserviceManager.addVideoToUserPlaylist(EMNUser, video : Video) -&gt; ():WebserviceManager.swift">
+      </ContextState>
+      <ContextState
+         contextName = "WatchingViewController.ReportFinished(NSNotification) -&gt; ():WatchingViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "ProfilePlaylistViewController.buildScrollView() -&gt; ():ProfilePlaylistViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Singleton.sharedInstance.userPlaylists">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "WatchingViewController.setupPlayingVideoInfo(String) -&gt; ():WatchingViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "PlaylistVC.collectionView(UICollectionView, didSelectItemAtIndexPath : NSIndexPath) -&gt; ():PlaylistVC.swift">
+      </ContextState>
+      <ContextState
+         contextName = "HomeViewController.viewDidLoad() -&gt; ():HomeViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "ProfilePlaylistViewController.arrangePlaylists() -&gt; ():ProfilePlaylistViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Singleton.sharedInstance.userPlaylists">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ArtistPageViewController.viewWillAppear(Bool) -&gt; ():ArtistPageViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "HomeViewController.changeToPage(SubmenuOptionView) -&gt; ():HomeViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "WebserviceManager.sendReportNotification() -&gt; ():WebserviceManager.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Singleton.sharedInstance.currentReport">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "HomeViewController.didRotateFromInterfaceOrientation(UIInterfaceOrientation) -&gt; ():HomeViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "WatchingViewController.spliteFavFromUserList() -&gt; ():WatchingViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Singleton.sharedInstance.userPlaylists">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "WatchingViewController.get_basic_playlists() -&gt; ():WatchingViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "ArtistVideoCell.prepareForReuse() -&gt; ():ArtistVideoCell.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "CGFloat(isPremiumVideo)">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "WebserviceManager.updateUserPoints() -&gt; ():WebserviceManager.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Singleton.sharedInstance.user">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "WatchingViewController.(actionCreatePlaylist(WatchingViewController) -&gt; (UIButton) -&gt; ()).(closure #1):WatchingViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Singleton.sharedInstance.userPlaylists">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "HomeViewController.buildScrollView() -&gt; ():HomeViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "contentScrollView.bounds.width">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "WebserviceManager.(getVideos in _B1C6496497A74C6F74A86A7C24EF5ADA)([NSDictionary]) -&gt; [Video]:WebserviceManager.swift">
+      </ContextState>
+      <ContextState
+         contextName = "WebserviceManager.(getVideosInEMNCategoryItem(WebserviceManager) -&gt; (String, type : EMNCategoryType, completionHandler : (videos : [Video]) -&gt; ()) -&gt; ()).(closure #1):WebserviceManager.swift">
+      </ContextState>
+      <ContextState
+         contextName = "WatchingViewController.playerStatus(NSNotification) -&gt; ():WatchingViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Singleton.sharedInstance.currentReport">
+            </PersistentString>
+            <PersistentString
+               value = "ooyalaVideo.embedCode">
+            </PersistentString>
+            <PersistentString
+               value = "Singleton.sharedInstance.currentReport?.category">
+            </PersistentString>
+            <PersistentString
+               value = "videos[ooyalaVideo.embedCode]">
+            </PersistentString>
+            <PersistentString
+               value = "ooyalaVideo.previousVideo()?.embedCode">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "Singleton.sendReportsInQueue() -&gt; ():Singleton.swift">
+      </ContextState>
+      <ContextState
+         contextName = "MenuViewController.viewWillAppear(Bool) -&gt; ():MenuViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "ProfileViewController.arrangePlaylists() -&gt; ():ProfileViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.array_playlist">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "UpgradeViewController.goBack() -&gt; ():UpgradeViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "HomeViewController.initScrollView() -&gt; ():HomeViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.menuScrollView.subviews">
+            </PersistentString>
+            <PersistentString
+               value = "self.contentScrollView.subviews">
+            </PersistentString>
+            <PersistentString
+               value = "self.contentScrollView.frame">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ArtistPageViewController.collectionView(UICollectionView, layout : UICollectionViewLayout, sizeForItemAtIndexPath : NSIndexPath) -&gt; CGSize:ArtistPageViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "CGSizeMake(UIScreen.mainScreen().bounds.size.width, 70)">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "Video.isEMGTag() -&gt; Bool:Video.swift">
+      </ContextState>
+      <ContextState
+         contextName = "ProfilePlaylistViewController.handleLongPress(UILongPressGestureRecognizer) -&gt; ():ProfilePlaylistViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "cutomView.tag">
+            </PersistentString>
+            <PersistentString
+               value = "array_playlist[index]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PlaylistVC.(actionAddVideo(PlaylistVC) -&gt; (UIButton) -&gt; ()).(closure #1):PlaylistVC.swift">
+      </ContextState>
+      <ContextState
+         contextName = "HomeViewController.scrollToPage(CGFloat, animated : Bool) -&gt; ():HomeViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "currentIndex">
+            </PersistentString>
+            <PersistentString
+               value = "currentPage">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

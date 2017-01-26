@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="Gotham-Book.otf">
+            <string>Gotham-Book</string>
+            <string>Gotham-Book</string>
+        </mutableArray>
+        <mutableArray key="Gotham-Medium.otf">
+            <string>Gotham-Medium</string>
+        </mutableArray>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ArtistVideoCell" customModule="emn" customModuleProvider="target">
+            <connections>
+                <outlet property="activityIndicator" destination="EYR-rt-Jc7" id="GTx-Ko-BYB"/>
+                <outlet property="artistNameLabel" destination="NR0-EY-Ouz" id="H3K-I0-f3d"/>
+                <outlet property="detailButton" destination="GqU-Vh-X5S" id="CvN-Ng-HyF"/>
+                <outlet property="imgPremium" destination="CYu-x4-Ghp" id="nms-3A-haf"/>
+                <outlet property="thumbnailImageView" destination="PEr-Vu-mA6" id="1OT-Jo-2Z3"/>
+                <outlet property="videoInfoLabel" destination="1k4-Bn-tEh" id="s2p-wU-fV3"/>
+                <outlet property="videoNameLabel" destination="QWr-sO-GXy" id="ugQ-l6-HRs"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="I2S-ZM-loE">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="70"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Casting-Crowns_The-Altar-And-The-Door.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="PEr-Vu-mA6">
+                    <rect key="frame" x="0.0" y="0.0" width="93" height="70"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="70" id="LaF-ug-mjr"/>
+                        <constraint firstAttribute="width" constant="93" id="YFy-MD-Tnn"/>
+                    </constraints>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GqU-Vh-X5S">
+                    <rect key="frame" x="550" y="-10" width="50" height="90"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="50" id="0zY-0L-uoj"/>
+                        <constraint firstAttribute="height" constant="90" id="kKE-sL-sSC"/>
+                    </constraints>
+                    <state key="normal" image="button_more">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="East to West" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QWr-sO-GXy">
+                    <rect key="frame" x="103" y="10" width="439" height="12"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="12" id="VRU-eD-NEO"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Gotham-Medium" family="Gotham" pointSize="12"/>
+                    <color key="textColor" red="0.1137254902" green="0.1137254902" blue="0.1137254902" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Casting Crowns" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NR0-EY-Ouz">
+                    <rect key="frame" x="103" y="32" width="439" height="11"/>
+                    <fontDescription key="fontDescription" name="Gotham-Book" family="Gotham" pointSize="11"/>
+                    <color key="textColor" red="0.47450980390000003" green="0.47450980390000003" blue="0.47450980390000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="70 Followers" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1k4-Bn-tEh">
+                    <rect key="frame" x="103" y="48" width="439" height="11"/>
+                    <fontDescription key="fontDescription" name="Gotham-Book" family="Gotham" pointSize="11"/>
+                    <color key="textColor" red="0.47450980390000003" green="0.47450980390000003" blue="0.47450980390000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="CYu-x4-Ghp">
+                    <rect key="frame" x="48" y="0.0" width="45" height="45"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="45" id="3Aq-Dv-t7x"/>
+                        <constraint firstAttribute="height" constant="45" id="8dC-e7-cNM"/>
+                    </constraints>
+                </imageView>
+                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="EYR-rt-Jc7">
+                    <rect key="frame" x="36" y="25" width="20" height="20"/>
+                </activityIndicatorView>
+            </subviews>
+            <color key="backgroundColor" red="0.94509803921568625" green="0.94509803921568625" blue="0.94509803921568625" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="1k4-Bn-tEh" firstAttribute="leading" secondItem="PEr-Vu-mA6" secondAttribute="trailing" constant="10" id="6MY-xh-aN6"/>
+                <constraint firstItem="PEr-Vu-mA6" firstAttribute="leading" secondItem="I2S-ZM-loE" secondAttribute="leading" id="8eb-GQ-cke"/>
+                <constraint firstItem="QWr-sO-GXy" firstAttribute="top" secondItem="I2S-ZM-loE" secondAttribute="top" constant="10" id="DXf-b6-XHu"/>
+                <constraint firstItem="GqU-Vh-X5S" firstAttribute="leading" secondItem="NR0-EY-Ouz" secondAttribute="trailing" constant="8" id="NPP-MJ-Kki"/>
+                <constraint firstAttribute="centerY" secondItem="GqU-Vh-X5S" secondAttribute="centerY" id="Q4f-HS-fcA"/>
+                <constraint firstItem="NR0-EY-Ouz" firstAttribute="leading" secondItem="PEr-Vu-mA6" secondAttribute="trailing" constant="10" id="Sx0-01-tCl"/>
+                <constraint firstItem="GqU-Vh-X5S" firstAttribute="leading" secondItem="NR0-EY-Ouz" secondAttribute="trailing" constant="8" id="TT8-qZ-gUp"/>
+                <constraint firstItem="NR0-EY-Ouz" firstAttribute="top" secondItem="QWr-sO-GXy" secondAttribute="bottom" constant="10" id="Vr1-Xt-skS"/>
+                <constraint firstItem="GqU-Vh-X5S" firstAttribute="leading" secondItem="QWr-sO-GXy" secondAttribute="trailing" constant="8" id="Z4m-FO-kW4"/>
+                <constraint firstItem="EYR-rt-Jc7" firstAttribute="centerX" secondItem="PEr-Vu-mA6" secondAttribute="centerX" id="ZnA-iH-drE"/>
+                <constraint firstItem="QWr-sO-GXy" firstAttribute="leading" secondItem="CYu-x4-Ghp" secondAttribute="trailing" constant="10" id="aMg-4B-yXI"/>
+                <constraint firstItem="GqU-Vh-X5S" firstAttribute="leading" secondItem="1k4-Bn-tEh" secondAttribute="trailing" constant="8" id="e3l-Ny-jJq"/>
+                <constraint firstAttribute="bottom" secondItem="CYu-x4-Ghp" secondAttribute="bottom" constant="25" id="eWh-B1-rYF"/>
+                <constraint firstItem="CYu-x4-Ghp" firstAttribute="top" secondItem="I2S-ZM-loE" secondAttribute="top" id="ftl-yQ-FUy"/>
+                <constraint firstItem="1k4-Bn-tEh" firstAttribute="top" secondItem="NR0-EY-Ouz" secondAttribute="bottom" constant="5" id="kDu-B6-GrA"/>
+                <constraint firstItem="NR0-EY-Ouz" firstAttribute="leading" secondItem="CYu-x4-Ghp" secondAttribute="trailing" constant="10" id="o5q-qp-EsF"/>
+                <constraint firstAttribute="trailing" secondItem="GqU-Vh-X5S" secondAttribute="trailing" id="puB-eA-SRx"/>
+                <constraint firstItem="CYu-x4-Ghp" firstAttribute="leading" secondItem="I2S-ZM-loE" secondAttribute="leading" constant="48" id="rJu-rL-DXq"/>
+                <constraint firstAttribute="centerY" secondItem="PEr-Vu-mA6" secondAttribute="centerY" id="twk-GR-yUG"/>
+                <constraint firstItem="EYR-rt-Jc7" firstAttribute="centerY" secondItem="PEr-Vu-mA6" secondAttribute="centerY" id="vgO-V4-rgH"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="347" y="151"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="Casting-Crowns_The-Altar-And-The-Door.jpg" width="300" height="300"/>
+        <image name="button_more" width="7" height="13"/>
+    </resources>
+</document>
